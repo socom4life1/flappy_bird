@@ -41,13 +41,8 @@ window.onload = function() {
     board = document.getElementById("board");
     board.height = boardHeight;
     board.width = boardWidth;
-    context = board.getContext("2d"); //used for drawing on the board
+    context = board.getContext("2d");
 
-    //draw flappy bird
-    // context.fillStyle = "green";
-    // context.fillRect(bird.x, bird.y, bird.width, bird.height);
-
-    //load images
     birdImg = new Image();
     birdImg.src = "./flappybird.png";
     birdImg.onload = function() {
@@ -61,8 +56,13 @@ window.onload = function() {
     bottomPipeImg.src = "./bottompipe.png";
 
     requestAnimationFrame(update);
-    setInterval(placePipes, 1500); //every 1.5 seconds
+    setInterval(placePipes, 1500);
+
     document.addEventListener("keydown", moveBird);
+
+    // 👉 ADD THESE LINES for touch & tap support
+    document.addEventListener("touchstart", moveBird);
+    document.addEventListener("click", moveBird);
 }
 
 function update() {
@@ -146,11 +146,10 @@ function placePipes() {
 }
 
 function moveBird(e) {
-    if (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX") {
-        //jump
+    if (gameOver || e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyX" || e.type === "touchstart" || e.type === "click") {
         velocityY = -6;
 
-        //reset game
+        // Reset the game if it's over
         if (gameOver) {
             bird.y = birdY;
             pipeArray = [];
